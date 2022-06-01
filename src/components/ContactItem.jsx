@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ContactItem = ({contact, setCurrentContact, setVisible, handleDeleteContact}) => {
+const ContactItem = ({contact, dispatch}) => {
 	return (
 		<div className={'contact_item'}>
 			<span></span>
@@ -10,10 +10,10 @@ const ContactItem = ({contact, setCurrentContact, setVisible, handleDeleteContac
 			</div>
 			<div className={'contact_actions'}>
 				<button onClick={() => {
-					setCurrentContact(contact)
-					setVisible(true)
+					dispatch({type: 'CURRENT_CONTACT', payload: contact})
+					dispatch({type: 'VISIBLE', payload: true})
 				}}>✍️</button>
-				<button onClick={() => handleDeleteContact(contact.id)}>🗑</button>
+				<button onClick={() => dispatch({type: 'DELETE', payload: contact.id})}>🗑</button>
 			</div>
 		</div>
 	)

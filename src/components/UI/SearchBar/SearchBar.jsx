@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react'
 
-const SearchBar = ({handleSearch}) => {
+const SearchBar = ({dispatch}) => {
 
 	const [searchQuery, setSearchQuery] = useState('')
 
 	useEffect(() => {
-		handleSearch(searchQuery)
+		dispatch({type: 'SEARCHED_CONTACTS', payload: searchQuery})
 	}, [searchQuery])
 
 	return (

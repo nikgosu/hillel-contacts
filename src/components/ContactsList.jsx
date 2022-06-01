@@ -2,10 +2,10 @@ import React from 'react'
 import ContactItem from "./ContactItem"
 import SearchBar from "./UI/SearchBar/SearchBar"
 
-const ContactsList = ({contacts, setCurrentContact, setVisible, handleDeleteContact, handleSearch}) => {
+const ContactsList = ({contacts, dispatch}) => {
 	return (
 		<div className={'contacts-container'}>
-			<SearchBar handleSearch={handleSearch}/>
+			<SearchBar dispatch={dispatch}/>
 			{contacts.length === 0 ?
 				<div>
 					No contacts found
@@ -13,9 +13,7 @@ const ContactsList = ({contacts, setCurrentContact, setVisible, handleDeleteCont
 				:
 				contacts.map(contact => (
 						<ContactItem
-							handleDeleteContact={handleDeleteContact}
-							setCurrentContact={setCurrentContact}
-							setVisible={setVisible}
+							dispatch={dispatch}
 							key={contact.phone}
 							contact={contact}
 						/>

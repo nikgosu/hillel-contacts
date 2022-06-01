@@ -1,11 +1,10 @@
-import React, {useState} from 'react'
+import React, {useReducer} from 'react'
 import MyHeader from "./MyHeader"
 import ContactsList from "./ContactsList"
 import MyDialog from "./UI/MyDialog/MyDialog"
 
-const ContactsBook = () => {
-
-	const [contacts, setContacts] = useState([
+const InitialState = {
+	contacts: [
 		{
 			id: 1,
 			name: 'Nikita',
@@ -30,41 +29,44 @@ const ContactsBook = () => {
 			surname: 'Basuk',
 			phone: '+38 (067) 789 11 98'
 		},
-	])
+	],
+	currentContact: {},
+	visible: false
+}
 
-	const [currentContact, setCurrentContact] = useState({})
-	const [searchedContacts, setSearchedContacts] = useState(contacts)
-	const [visible, setVisible] = useState(false)
+InitialState.searchedContacts = InitialState.contacts
 
-	const handleUpdateContact = (contact) => {
-		setContacts(contacts.map(item => item.id === contact.id ? contact : item))
-		setVisible(false)
-	}
+const reducer = (state, action) => {
+  switch (action.type) {
+	  case 'CURRENT_CONTACT' :
+			return {...state, currentContact: action.payload}
+	  case 'SEARCHED_CONTACTS' :
+			return {...state, searchedContacts: state.contacts.filter(contact => contact.name.toLowerCase().includes(action.payload.toLowerCase()) | contact.surname.toLowerCase().includes(action.payload.toLowerCase()) | contact.phone.toLowerCase().includes(action.payload.toLowerCase()))}
+	  case 'VISIBLE' :
+			return {...state, visible: action.payload}
+	  case 'DELETE' :
+			return {...state, searchedContacts: state.searchedContacts.filter(item => item.id !== action.payload)}
+	  case 'UPDATE' :
+			return {...state, searchedContacts: state.searchedContacts.map(item => item.id === action.payload.id ? action.payload : item)}
+  }
+}
 
-	const handleDeleteContact = (id) => {
-		setSearchedContacts(searchedContacts.filter(item => item.id !== id))
-	}
+const ContactsBook = () => {
 
-	const handleSearch = (query) => {
-		setSearchedContacts(contacts.filter(contact => contact.name.toLowerCase().includes(query.toLowerCase()) | contact.surname.toLowerCase().includes(query.toLowerCase()) | contact.phone.toLowerCase().includes(query.toLowerCase())))
-	}
+	const [state, dispatch] = useReducer(reducer, InitialState)
 
 	return (
 		<div className={'container'}>
 			<MyHeader/>
 			<ContactsList
-				contacts={searchedContacts}
-				handleSearch={handleSearch}
-				setCurrentContact={setCurrentContact}
-				handleDeleteContact={handleDeleteContact}
-				setVisible={setVisible}
+				contacts={state.searchedContacts}
+				dispatch={dispatch}
 			/>
 			<a href="https://github.com/nikgosu">My GitHub account</a>
 			<MyDialog
-				visible={visible}
-				setVisible={setVisible}
-				handleUpdateContact={handleUpdateContact}
-				currentContact={currentContact}
+				visible={state.visible}
+				dispatch={dispatch}
+				currentContact={state.currentContact}
 			/>
 		</div>
 	)

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 
-const MyDialog = ({visible, setVisible, currentContact, handleUpdateContact}) => {
+const MyDialog = ({visible, dispatch, currentContact}) => {
 
-	const [updatedContact, setUpdatedContact] = useState({})
+	const [updatedContact, setUpdatedContact] = useState(currentContact)
 
 	const handleChangeContact = (e) => {
 		setUpdatedContact({...updatedContact, [e.target.name]: e.target.value})
@@ -15,7 +15,7 @@ const MyDialog = ({visible, setVisible, currentContact, handleUpdateContact}) =>
 	return (
 		<div
 			className={visible ? 'my-dialog my-dialog_visible' : 'my-dialog'}
-			onClick={() => setVisible(false)}
+			onClick={() => dispatch({type: 'VISIBLE', payload: false})}
 		>
 			<div
 				className="dialog_content"
@@ -24,7 +24,7 @@ const MyDialog = ({visible, setVisible, currentContact, handleUpdateContact}) =>
 				<div className="dialog_header">
 					<p>Edit contact: <strong>{updatedContact.name} {updatedContact.surname}</strong></p>
 					<p
-						onClick={() => setVisible(false)}
+						onClick={() => dispatch({type: 'VISIBLE', payload: false})}
 					>X</p>
 				</div>
 				<div className="dialog_body">
@@ -54,7 +54,10 @@ const MyDialog = ({visible, setVisible, currentContact, handleUpdateContact}) =>
 							id={'phone'}
 							type="text"
 						/>
-						<button onClick={() => handleUpdateContact(updatedContact)}>Save</button>
+						<button onClick={() => {
+							dispatch({type: 'UPDATE', payload: updatedContact})
+							dispatch({type: 'VISIBLE', payload: false})
+						}}>Save</button>
 					</div>
 				</div>
 			</div>
