@@ -1,20 +1,22 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
+import {ContextApp} from "../../../reducers"
 
-const MyDialog = ({visible, dispatch, currentContact}) => {
+const MyDialog = () => {
 
-	const [updatedContact, setUpdatedContact] = useState(currentContact)
+	const {state, dispatch} = useContext(ContextApp)
+	const [updatedContact, setUpdatedContact] = useState(state.currentContact)
 
 	const handleChangeContact = (e) => {
 		setUpdatedContact({...updatedContact, [e.target.name]: e.target.value})
 	}
 
 	useEffect(() => {
-		setUpdatedContact(currentContact)
-	}, [currentContact])
+		setUpdatedContact(state.currentContact)
+	}, [state.currentContact])
 
 	return (
 		<div
-			className={visible ? 'my-dialog my-dialog_visible' : 'my-dialog'}
+			className={state.visible ? 'my-dialog my-dialog_visible' : 'my-dialog'}
 			onClick={() => dispatch({type: 'VISIBLE', payload: false})}
 		>
 			<div

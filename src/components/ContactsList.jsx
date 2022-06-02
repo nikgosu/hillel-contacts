@@ -1,19 +1,22 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import ContactItem from "./ContactItem"
 import SearchBar from "./UI/SearchBar/SearchBar"
+import {ContextApp} from "../reducers"
 
-const ContactsList = ({contacts, dispatch}) => {
+const ContactsList = () => {
+
+	const {state} = useContext(ContextApp)
+
 	return (
 		<div className={'contacts-container'}>
-			<SearchBar dispatch={dispatch}/>
-			{contacts.length === 0 ?
+			<SearchBar/>
+			{state.searchedContacts.length === 0 ?
 				<div>
 					No contacts found
 				</div>
 				:
-				contacts.map(contact => (
+				state.searchedContacts.map(contact => (
 						<ContactItem
-							dispatch={dispatch}
 							key={contact.phone}
 							contact={contact}
 						/>

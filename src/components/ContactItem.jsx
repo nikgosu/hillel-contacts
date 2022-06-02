@@ -1,6 +1,10 @@
-import React from 'react'
+import React, {useContext} from 'react'
+import {ContextApp} from "../reducers"
 
-const ContactItem = ({contact, dispatch}) => {
+const ContactItem = ({contact}) => {
+
+	const {dispatch} = useContext(ContextApp)
+
 	return (
 		<div className={'contact_item'}>
 			<span></span>

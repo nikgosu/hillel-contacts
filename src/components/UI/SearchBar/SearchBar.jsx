@@ -1,12 +1,14 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
+import {ContextApp} from "../../../reducers"
 
-const SearchBar = ({dispatch}) => {
+const SearchBar = () => {
 
 	const [searchQuery, setSearchQuery] = useState('')
+	const {dispatch} = useContext(ContextApp)
 
 	useEffect(() => {
 		dispatch({type: 'SEARCHED_CONTACTS', payload: searchQuery})
-	}, [searchQuery])
+	}, [searchQuery, dispatch])
 
 	return (
 		<input
